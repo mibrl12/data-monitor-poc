@@ -8,6 +8,11 @@ services:
     volumes:
       - mongodb:/data/db
 
+  datahub:
+    build: ./datahub/
+    ports:
+      - 8000:8000
+
 volumes:
   mongodb: {}
 
