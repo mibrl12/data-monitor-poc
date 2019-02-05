@@ -33,7 +33,7 @@ class Reporter(object):
 
     def _construct_payload(self):
         if self._type == 'PRICE':
-            return {'value': self._get_value(), 'timestamp': self._get_timestamp_utc()}
+            return {'actuals': [{'value': self._get_value(), 'timestamp': self._get_timestamp_utc()}]}
 
     @staticmethod
     def _get_value():
