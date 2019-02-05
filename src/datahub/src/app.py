@@ -2,7 +2,7 @@ from flask import Flask, Blueprint, redirect
 
 
 from api.v1.restplus import api
-from api.v1.endpoints.actuals import ns as intersect_namespace
+from api.v1.endpoints.actuals import ns as actuals_namespace
 
 
 app = Flask(__name__)
@@ -11,7 +11,7 @@ app = Flask(__name__)
 def setup_app(flask_app):
     blueprint_v1 = Blueprint('api_v1', __name__, url_prefix='/api/v1')
     api.init_app(blueprint_v1)
-    api.add_namespace(intersect_namespace)
+    api.add_namespace(actuals_namespace)
     flask_app.register_blueprint(blueprint_v1)
 
 
