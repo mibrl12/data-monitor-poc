@@ -3,7 +3,7 @@ import logging
 from flask import request
 from flask_restplus import Resource
 
-from api.v1.logic.actuals import report_actuals
+from api.v1.logic.actuals import report_actuals, get_supported_actuals
 from api.v1.restplus import api
 from api.v1.serializers.actuals import list_of_actuals
 
@@ -11,6 +11,17 @@ log = logging.getLogger(__name__)
 
 ns = api.namespace('actuals',
                    description='Operations related to ingesting data from reporters.')
+
+
+@ns.route('/')
+class ActualsList(Resource):
+
+    @api.expect()
+    def get(self):
+        """
+        Returns list of supported actuals.
+        """
+        return get_supported_actuals(), 200
 
 
 @ns.route('/<string:actual_type>')
