@@ -1,10 +1,9 @@
-import logging
-
 from flask_restplus import Api
 from werkzeug.exceptions import BadRequest
 
+from utils.logging import get_logger
 
-log = logging.getLogger(__name__)
+log = get_logger(__file__)
 
 api = Api(version='1.0', title='DataHub API',
           description='This API provides storage functionality of the time series data.')

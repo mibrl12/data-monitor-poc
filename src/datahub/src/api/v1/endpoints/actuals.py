@@ -1,5 +1,3 @@
-import logging
-
 from flask import request
 from flask_restplus import Resource
 from werkzeug.exceptions import BadRequest
@@ -8,8 +6,9 @@ from api.v1.logic.actuals import report_actuals, get_supported_actuals
 from api.v1.models.supported_actuals import SupportedActuals
 from api.v1.restplus import api
 from api.v1.serializers.actuals import list_of_actuals
+from utils.logging import get_logger
 
-log = logging.getLogger(__name__)
+log = get_logger(__file__)
 
 ns = api.namespace('actuals',
                    description='Operations related to ingesting data from reporters.')
