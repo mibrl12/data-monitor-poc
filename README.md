@@ -7,6 +7,10 @@ This is a PoC of a system which includes generation of data, its ingest, storage
 - clone this repository
 - run `docker-compose up -d` from `/scr` folder
 
+## Concept and Architecture
+
+![components](https://raw.githubusercontent.com/mibrl12/data-monitor-poc/develop/assets/components.png)
+
 ## Components
 
 ### datahub
