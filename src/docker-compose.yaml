@@ -2,6 +2,7 @@ version: '3.4'
 
 services:
   mongodb:
+    restart: always
     image: mongo:3.6
     ports:
       - "27017:27017"
@@ -9,15 +10,24 @@ services:
       - mongodb:/data/db
 
   datahub:
+    restart: always
     build: ./datahub/
     ports:
       - 8000:8000
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017
 
   data-reporter:
+    restart: always
     build: ./data-reporter/
+    environment:
+      - DATAHUB_BASE_URL=http://datahub:8000
 
   data-monitor:
+    restart: always
     build: ./data-monitor/
+    environment:
+      - MONGO_HOST=mongodb
 
 volumes:
   mongodb: {}
