@@ -1,7 +1,7 @@
 from flask import request
 from flask_restplus import Resource
 
-from api.v1.logic.actuals import report_actuals
+from api.v1.logic.actuals import report_actuals, get_supported_actuals
 from api.v1.restplus import api
 from api.v1.serializers.actuals import list_of_actuals
 from utils.logging import get_logger
@@ -20,7 +20,7 @@ class ActualsList(Resource):
         """
         Returns list of supported actuals.
         """
-        return None, 200
+        return get_supported_actuals(), 200
 
 
 @ns.route('/<string:actual_type>')

@@ -5,6 +5,10 @@ from api.v1.serializers.actuals import actual
 from common.db import mongo
 
 
+def get_supported_actuals():
+    return [e.name for e in SupportedActuals]
+
+
 def report_actuals(actual_type: str, data: actual):
     actuals = data.get('actuals')
     if actual_type.upper() == SupportedActuals.PRICE.name:
