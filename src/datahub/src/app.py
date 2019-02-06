@@ -11,7 +11,7 @@ def setup_app(flask_app):
 
     from common.db import mongo
     app.config.from_object(config)
-    mongo.init_app(app, 'mongodb://localhost:27017/actuals')
+    mongo.init_app(app, f'{config.MONGO_URL}/{config.MONGO_DBNAME}')
 
     blueprint_v1 = Blueprint('api_v1', __name__, url_prefix='/api/v1')
     api.init_app(blueprint_v1)
