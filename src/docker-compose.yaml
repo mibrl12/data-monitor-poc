@@ -26,9 +26,30 @@ services:
   data-monitor:
     restart: always
     build: ./data-monitor/
+    ports:
+      - 5000:5000
     environment:
       - MONGO_HOST=mongodb
 
+#  monitoring
+
+  prometheus:
+    image: prom/prometheus:v2.7.1
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+    ports:
+      - 9090:9090
+
+  grafana:
+    image: grafana/grafana:5.4.3
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana:/var/lib/grafana
+
 volumes:
   mongodb: {}
-
+  grafana: {}
