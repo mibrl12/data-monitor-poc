@@ -19,14 +19,10 @@ def report_actuals(actual_type: str, data: actual):
     for actual in actuals:
         actual['processed_timestamp'] = processing_time
 
-    if actual_type.upper() == SupportedActuals.PRICE.name:
-        mongo.db.prices.insert(actuals)
-    elif actual_type.upper() == SupportedActuals.CONSUMPTION.name:
-        mongo.db.consumption.insert(actuals)
-    elif actual_type.upper() == SupportedActuals.PRODUCTION.name:
-        mongo.db.prodution.insert(actuals)
-    else:
+    if actual_type.upper() not in SupportedActuals.__members__:
         raise BadRequest(f"Actual type {actual_type} is not supported!")
+
+    mongo.db[actual_type.lower()].insert(actuals)
 
 
 def _get_timestamp_utc():
