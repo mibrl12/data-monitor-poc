@@ -1,4 +1,3 @@
-import logging
 import pytz
 import requests
 import time
@@ -6,8 +5,9 @@ from datetime import datetime
 from random import random
 
 from models.supported_actuals import SupportedActuals
+from utils.logging import get_logger
 
-log = logging.getLogger(__file__)
+log = get_logger(__file__)
 
 
 class Reporter(object):
