@@ -35,7 +35,13 @@ class Reporter(object):
 
     def _construct_payload(self):
         if self._type == SupportedActuals.PRICE.name:
-            return {'actuals': [{'value': self._get_value(), 'timestamp': self._get_timestamp_utc()}]}
+            return {'actuals': [{'name': self._get_commodity_name(),
+                                 'value': self._get_value(),
+                                 'timestamp': self._get_timestamp_utc()}]}
+
+    @staticmethod
+    def _get_commodity_name():
+        return 'MWh'
 
     @staticmethod
     def _get_value():
