@@ -1,7 +1,8 @@
 import logging
 from abc import abstractmethod, ABCMeta
-
 from pymongo.database import Database
+
+from models.monitored_actuals import MonitoredActuals
 
 log = logging.getLogger(__file__)
 
@@ -17,8 +18,7 @@ class DataMonitor(metaclass=ABCMeta):
 
 
 class PriceDataMonitor(DataMonitor):
-
-    collection_name = 'prices'
+    collection_name = MonitoredActuals.PRICE.name.lower()
 
     def __init__(self, db: Database):
         super().__init__(db=db)
