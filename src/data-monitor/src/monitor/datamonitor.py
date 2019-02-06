@@ -1,4 +1,6 @@
 import datetime
+import time
+
 import dateutil.parser
 from abc import abstractmethod, ABCMeta
 from pymongo.database import Database
@@ -28,13 +30,21 @@ class PriceDataMonitor(DataMonitor):
         self._offset = 0
         self._allowed_lateness = datetime.timedelta(seconds=60)
         self._threshold = 100
+        self._scrape_timeout_seconds = 30
 
     def start(self):
-        prices = self._collection.find().skip(self._offset)
-        for price in prices:
-            self.detect_outlier(price)
-            self.detect_late_arrival(price)
-        self._offset = self._collection.count()
+        while True:
+            try:
+                prices = self._collection.find().skip(self._offset)
+                for price in prices:
+                    self.detect_outlier(price)
+                    self.detect_late_arrival(price)
+                self._offset = self._collection.count()
+                log.debug(f'New offset {self._offset}')
+                time.sleep(self._scrape_timeout_seconds)
+            except Exception as err:
+                log.fatal('Unhandled error. Shutting down...', exc_info=True)
+                raise SystemExit(err)
 
     def detect_outlier(self, price):
         if price['value'] > self._threshold:
