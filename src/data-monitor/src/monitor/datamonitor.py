@@ -3,6 +3,8 @@ import time
 
 import dateutil.parser
 from abc import abstractmethod, ABCMeta
+
+from prometheus_client import Counter
 from pymongo.database import Database
 
 from models.monitored_actuals import MonitoredActuals
@@ -22,15 +24,22 @@ class DataMonitor(metaclass=ABCMeta):
 
 
 class PriceDataMonitor(DataMonitor):
-    collection_name = MonitoredActuals.PRICE.name.lower()
+    _collection_name = MonitoredActuals.PRICE.name.lower()
 
     def __init__(self, db: Database):
         super().__init__(db=db)
-        self._collection = db[self.collection_name]
+        self._collection = db[self._collection_name]
         self._offset = 0
         self._allowed_lateness = datetime.timedelta(seconds=60)
         self._threshold = 100
         self._scrape_timeout_seconds = 30
+
+        self._outlier_actuals: Counter = Counter('datamonitor_outlier_actuals_total',
+                                                  'Indicates the number of the outlier actuals',
+                                                  ['actual_type']).labels(actual_type=self._collection_name)
+        self._late_actuals: Counter = Counter('datamonitor_late_actuals_total',
+                                                  'Indicates the number of the late actuals',
+                                                  ['actual_type']).labels(actual_type=self._collection_name)
 
     def start(self):
         while True:
@@ -49,7 +58,7 @@ class PriceDataMonitor(DataMonitor):
     def detect_outlier(self, price):
         if price['value'] > self._threshold:
             log.info(f'Outlier {price}')
-            # expose metric (e.g. counter outliers)
+            self._outlier_actuals.inc(1)
 
     def detect_late_arrival(self, price):
         event_time = dateutil.parser.parse(price['timestamp'])
@@ -57,5 +66,5 @@ class PriceDataMonitor(DataMonitor):
 
         if (processed_time - event_time) > self._allowed_lateness:
             log.info(f'Late actual {price}')
-            # expose metric (e.g. counter late arrivals)
+            self._late_actuals.inc(1)
 

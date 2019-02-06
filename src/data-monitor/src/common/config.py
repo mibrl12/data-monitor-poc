@@ -3,4 +3,5 @@ import os
 
 MONGO_DBNAME = os.environ.get('MONGO_DBNAME', 'actuals')
 MONGO_HOST = os.environ.get('MONGO_HOST', 'localhost')
-MONGO_PORT = int(os.environ.get('MONGO_PORT', '27017'))
+MONGO_PORT = int(os.environ.get('MONGO_PORT', 27017))
+MONITORING_PORT = int(os.environ.get('MONITORING_PORT', 5000))

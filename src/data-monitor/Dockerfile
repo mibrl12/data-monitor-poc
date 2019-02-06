@@ -10,4 +10,5 @@ COPY src/ .
 
 ENV PYTHONPATH=/app/
 
+EXPOSE 5000
 CMD ["python3", "./app.py"]
