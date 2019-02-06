@@ -5,6 +5,8 @@ import time
 from datetime import datetime
 from random import random
 
+from models.supported_actuals import SupportedActuals
+
 log = logging.getLogger(__file__)
 
 
@@ -12,9 +14,9 @@ class Reporter(object):
 
     def __init__(self, reporter_type: str, datahub_base_url: str,
                  actuals_api: str, delay_seconds: int):
+        self._type = reporter_type
         self._datahub_base_url = datahub_base_url
         self._actuals_api = actuals_api
-        self._type = reporter_type
         self._delay_seconds = delay_seconds
 
     def start(self):
@@ -32,7 +34,7 @@ class Reporter(object):
         log.info(f'Send actuals. Response code:{response.status_code}')
 
     def _construct_payload(self):
-        if self._type == 'PRICE':
+        if self._type == SupportedActuals.PRICE.name:
             return {'actuals': [{'value': self._get_value(), 'timestamp': self._get_timestamp_utc()}]}
 
     @staticmethod
