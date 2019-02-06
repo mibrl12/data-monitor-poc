@@ -16,6 +16,9 @@ services:
   data-reporter:
     build: ./data-reporter/
 
+  data-monitor:
+    build: ./data-monitor/
+
 volumes:
   mongodb: {}
 
